@@ -25,3 +25,27 @@ export function getCategoryFilterAPI<T>(id: string | string[]) {
     },
   })
 }
+
+/**
+ * @description: 获取导航数据
+ * @data { 
+     categoryId: 1005000 ,
+     page: 1,
+     pageSize: 20,
+     sortField: 'publishTime' | 'orderNum' | 'evaluateNum'
+   } 
+ * @return {*}
+ */
+export interface Data {
+  categoryId: any
+  page: number
+  pageSize: number
+  sortField: 'publishTime' | 'orderNum' | 'evaluateNum'
+}
+export function getSubCategoryAPI<T>(data: Data) {
+  return httpInstance.request<any, T>({
+    url: '/category/goods/temporary',
+    method: 'POST',
+    data,
+  })
+}
