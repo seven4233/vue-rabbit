@@ -20,7 +20,6 @@ onMounted(() => getBanner())
 </script>
 
 
-
 <template>
     <div class="home-banner">
         <el-carousel height="500px">

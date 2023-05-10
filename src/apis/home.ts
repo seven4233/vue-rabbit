@@ -1,8 +1,15 @@
 import httpInstance from '@/utils/http'
 
-export function getBannerAPI<T>() {
+/**
+ * 获取首页轮播图
+ * @returns
+ */
+export function getBannerAPI<T>(distributionSite = '1') {
   return httpInstance.request<any, T>({
     url: '/home/banner',
+    params: {
+      distributionSite,
+    },
   })
 }
 
