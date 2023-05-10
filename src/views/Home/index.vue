@@ -1,12 +1,12 @@
 <script setup lang="ts">
 
 
-
 </script>
 
 <template>
-  <!-- 一级路由出口 -->
-  <RouterView></RouterView>
+    <div>
+        home
+    </div>
 </template>
 
 <style lang="less"></style>
