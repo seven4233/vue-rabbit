@@ -11,7 +11,6 @@ export const lazyPlugin = {
         const { stop } = useIntersectionObserver(el, ([{ isIntersecting }]) => {
           if (isIntersecting) {
             el.src = binding.value
-            console.log(isIntersecting)
 
             stop()
           }
