@@ -1,55 +1,11 @@
 <script setup lang="ts">
-
-import { getCategoryAPI } from '@/apis/category';
-import { onMounted, ref } from 'vue';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { getBannerAPI } from '@/apis/home';
 import GoodsItem from '../Home/components/GoodsItem.vue';
 
-const route = useRoute()
-interface CategoryChildren {
-    id: string
-    name: string
-    picture: string
-    goods: any[]
-
-}
-interface CategoryType {
-    id?: string
-    name?: string
-    picture?: null
-    children?: CategoryChildren[]
-}
-
-const categoryData = ref<CategoryType>({})
-
-const getCategory = async (id = route.params.id) => {
-    const res = await getCategoryAPI<IReturnType<CategoryType>>(id as string)
-    categoryData.value = res.result
-}
-
-onMounted(() => getCategory())
-onBeforeRouteUpdate((to) => {
-    console.log("路由变化了");
-
-    getCategory(to.params.id)
-})
-
+import { useBanner } from './composables/useBanner'
+import { useCategory } from './composables/useCategory'
 // 获取banner
-interface IBannerType {
-    id: string
-    imgUrl: string
-    hrefUrl: string
-    type: string
-}
-
-const bannerList = ref<IBannerType[]>([])
-const getBanner = async () => {
-    const res = await getBannerAPI<IReturnType<IBannerType[]>>("2")
-    bannerList.value = res.result
-}
-
-onMounted(() => getBanner())
+const { bannerList } = useBanner()
+const { categoryData } = useCategory()
 </script>
 
 <template>
@@ -75,7 +31,7 @@ onMounted(() => getBanner())
                 <h3>全部分类</h3>
                 <ul>
                     <li v-for="i in categoryData.children" :key="i.id">
-                        <RouterLink to="/">
+                        <RouterLink :to="`/category/sub/${i.id}`">
                             <img :src="i.picture" />
                             <p>{{ i.name }}</p>
                         </RouterLink>
