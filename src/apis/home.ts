@@ -14,3 +14,12 @@ export function getNewAPI<T>() {
     url: '/home/new',
   })
 }
+
+/**
+ * 获取人气推荐
+ */
+export function getHotAPI<T>() {
+  return httpInstance.request<any, T>({
+    url: '/home/hot',
+  })
+}
