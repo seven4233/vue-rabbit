@@ -23,3 +23,13 @@ export function getHotAPI<T>() {
     url: '/home/hot',
   })
 }
+
+/**
+ * 获取所有商品模块
+ */
+
+export function getGoodsAPI<T>() {
+  return httpInstance.request<any, T>({
+    url: '/home/goods',
+  })
+}
