@@ -2,7 +2,7 @@
 
 import { getCategoryAPI } from '@/apis/category';
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { getBannerAPI } from '@/apis/home';
 import GoodsItem from '../Home/components/GoodsItem.vue';
 
@@ -23,13 +23,17 @@ interface CategoryType {
 
 const categoryData = ref<CategoryType>({})
 
-const getCategory = async (id: string) => {
-    const res = await getCategoryAPI<IReturnType<CategoryType>>(id)
+const getCategory = async (id = route.params.id) => {
+    const res = await getCategoryAPI<IReturnType<CategoryType>>(id as string)
     categoryData.value = res.result
 }
 
-onMounted(() => getCategory(route.params.id as string))
+onMounted(() => getCategory())
+onBeforeRouteUpdate((to) => {
+    console.log("路由变化了");
 
+    getCategory(to.params.id)
+})
 
 // 获取banner
 interface IBannerType {

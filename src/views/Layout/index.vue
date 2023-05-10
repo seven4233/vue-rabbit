@@ -12,17 +12,19 @@ import { onMounted } from 'vue'
 
 const categoryStore = useCategoryStore()
 
-onMounted(()=> categoryStore.getCategory())
+onMounted(() => categoryStore.getCategory())
 </script>
 
 <template>
     <div>
+        <LayoutFixed />
+        <LayoutNav />
+        <LayoutHeader />
+
         <!-- 二级路由出口 -->
-        <LayoutFixed/>
-        <LayoutNav/>
-        <LayoutHeader/>
-        <RouterView/>
-        <LayoutFooter/>
+        <RouterView />
+        <!-- <RouterView :key="$route.fullPath" /> -->
+        <LayoutFooter />
     </div>
 </template>
 
