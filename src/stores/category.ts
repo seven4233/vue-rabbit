@@ -17,9 +17,7 @@ interface IDataType {
   goods: IGoodsType[]
   children: IDataType[]
 }
-interface IReturnType {
-  result: IDataType[]
-}
+
 export const useCategoryStore = defineStore('counter', () => {
   const categoryList = ref<IDataType[]>([])
 
@@ -27,5 +25,6 @@ export const useCategoryStore = defineStore('counter', () => {
     const res = await getCategoryAPI<IReturnType>()
     categoryList.value = res.result
   }
+
   return { categoryList, getCategory }
 })
