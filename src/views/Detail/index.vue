@@ -3,6 +3,8 @@ import { getDetailAPI } from '@/apis/detail';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import DetailHot from './components/DetailHot.vue'
+import ImageView from '@/components/ImageView/index.vue'
+
 const route = useRoute()
 interface GoodsType {
   id?: string
@@ -24,10 +26,8 @@ const goods = ref<GoodsType>({} as GoodsType)
 const getGoods = async (id: string | string[]) => {
   const res = await getDetailAPI<IReturnType<GoodsType>>(id)
   goods.value = res.result
-  console.log(res);
 
 }
-
 onMounted(() => getGoods(route.params.id))
 
 </script>
@@ -51,7 +51,7 @@ onMounted(() => getGoods(route.params.id))
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-
+              <ImageView />
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>
