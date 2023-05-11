@@ -26,8 +26,6 @@ export function useCategory() {
 
   onMounted(() => getCategory())
   onBeforeRouteUpdate(to => {
-    console.log('路由变化了')
-
     getCategory(to.params.id)
   })
 

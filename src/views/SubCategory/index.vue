@@ -56,7 +56,6 @@ const tabChange = () => {
 // 加载更多
 const disabled = ref(false)
 const load = async () => {
-    console.log("到底");
     // 获取下一页数据
     reqData.value.page++
     const res = await getSubCategoryAPI<IReturnType<any>>(reqData.value)
@@ -73,8 +72,8 @@ const load = async () => {
         <!-- 面包屑 -->
         <div class="bread-container">
             <el-breadcrumb separator=">">
-                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: `/category/${filterData.parentId}` }">{{ filterData.parentName }}
+                <el-breadcrumb-item :to="{ path: '/' } as string">首页</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: `/category/${filterData.parentId}` } as string">{{ filterData.parentName }}
                 </el-breadcrumb-item>
                 <el-breadcrumb-item>{{ filterData.name }}</el-breadcrumb-item>
             </el-breadcrumb>

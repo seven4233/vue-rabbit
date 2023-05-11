@@ -18,7 +18,6 @@ const goodsProduct = ref<IGoodsType[]>([])
 const getGoods = async () => {
     const res = await getGoodsAPI<IReturnType<IGoodsType[]>>()
     goodsProduct.value = res.result
-    console.log(res.result);
 }
 
 onMounted(() => getGoods())
