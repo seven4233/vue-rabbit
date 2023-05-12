@@ -20,7 +20,8 @@ interface GoodsType {
   salesCount?: number
   saleInfo: string
   goods: any[],
-  children: any[]
+  children: any[],
+  mainPictures: any[]
 }
 const goods = ref<GoodsType>({} as GoodsType)
 const getGoods = async (id: string | string[]) => {
@@ -51,7 +52,7 @@ onMounted(() => getGoods(route.params.id))
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-              <ImageView />
+              <ImageView :image-list="goods.mainPictures" />
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>
