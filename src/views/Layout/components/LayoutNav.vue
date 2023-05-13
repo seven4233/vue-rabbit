@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import {useUserStore} from "@/stores/user";
+import {useRouter} from "vue-router";
+
 const userStore = useUserStore()
+const router = useRouter();
+const logout = () => {
+    // 1.清楚用户信息
+    userStore.clearUserInfo()
+    // 2.跳转到登录页
+    router.replace("/login")
+}
 
 </script>
 
@@ -9,9 +18,11 @@ const userStore = useUserStore()
         <div class="container">
             <ul>
                 <template v-if="userStore.userInfo">
-                    <li><a href="javascript:;"><i class=" iconfont icon-user"></i>{{ userStore.userInfo.account }}</a></li>
+                    <li><a href="javascript:;"><i class=" iconfont icon-user"></i>{{ userStore.userInfo.account }}</a>
+                    </li>
                     <li>
-                        <el-popconfirm title="确认退出吗?" confirm-button-text="确认" cancel-button-text="取消">
+                        <el-popconfirm @confirm="logout" title="确认退出吗?" confirm-button-text="确认"
+                                       cancel-button-text="取消">
                             <template #reference>
                                 <a href="javascript:;">退出登录</a>
                             </template>
@@ -33,37 +44,37 @@ const userStore = useUserStore()
 
 <style scoped lang="scss">
 .app-topnav {
-    background: #333;
+  background: #333;
 
-    ul {
-        display: flex;
-        height: 53px;
-        justify-content: flex-end;
-        align-items: center;
+  ul {
+    display: flex;
+    height: 53px;
+    justify-content: flex-end;
+    align-items: center;
 
-        li {
-            a {
-                padding: 0 15px;
-                color: #cdcdcd;
-                line-height: 1;
-                display: inline-block;
+    li {
+      a {
+        padding: 0 15px;
+        color: #cdcdcd;
+        line-height: 1;
+        display: inline-block;
 
-                i {
-                    font-size: 14px;
-                    margin-right: 2px;
-                }
-
-                &:hover {
-                    color: $xtxColor;
-                }
-            }
-
-            ~li {
-                a {
-                    border-left: 2px solid #666;
-                }
-            }
+        i {
+          font-size: 14px;
+          margin-right: 2px;
         }
+
+        &:hover {
+          color: $xtxColor;
+        }
+      }
+
+      ~ li {
+        a {
+          border-left: 2px solid #666;
+        }
+      }
     }
+  }
 }
 </style>
