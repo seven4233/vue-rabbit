@@ -6,7 +6,7 @@ export const useUserStore = defineStore('user', ()=>{
 
     // 定义管理用户数据的state
     const userInfo = ref({})
-    const getUserInfo = async({account, password})=>{
+    const getUserInfo = async({account,  password})=>{
         const res = await loginAPI<IReturnType<any>>({account, password})
         console.log(res)
         userInfo.value = res.result
@@ -16,4 +16,6 @@ export const useUserStore = defineStore('user', ()=>{
         userInfo,
         getUserInfo
     }
+},{
+    persist: true
 })

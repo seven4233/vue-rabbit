@@ -5,10 +5,9 @@ import {useRouter} from "vue-router";
 import type { FormInstance, FormItemRule } from 'element-plus/lib/components/index.js'
 import type {FormRules} from "element-plus/lib/components/index.js";
 import { ElMessage } from 'element-plus'
-
 import {useUserStore} from "@/stores/user";
-
 const userStore = useUserStore()
+
 // import 'element-plus/theme-chalk/el-message.css'
 // 表单校验 （账号名+密码)
 const formRef = ref<FormInstance>()
