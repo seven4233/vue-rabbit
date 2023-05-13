@@ -1,19 +1,24 @@
 <script setup lang="ts">
-import type { FormInstance, FormItemRule } from 'element-plus/lib/components/index.js'
-import { ref } from 'vue'
 
+import { ref } from 'vue'
+import {useRouter} from "vue-router";
+import type { FormInstance, FormItemRule } from 'element-plus/lib/components/index.js'
+import type {FormRules} from "element-plus/lib/components/index.js";
+import { ElMessage } from 'element-plus'
+
+import {useUserStore} from "@/stores/user";
+
+const userStore = useUserStore()
+// import 'element-plus/theme-chalk/el-message.css'
 // 表单校验 （账号名+密码)
 const formRef = ref<FormInstance>()
+
 const form = ref({
     account: '',
     password: '',
     agree: true
 })
-
-type IRules = {
-    [index: string]: FormItemRule[]
-}
-const rules: IRules = {
+const rules = ref<FormRules>({
     account: [
         { required: true, message: "用户名不能为空", trigger: "blur" },
     ],
@@ -32,13 +37,21 @@ const rules: IRules = {
             }
         }
     ]
-}
+})
 
-
+const router = useRouter()
 // 点击登录
 const login = () => {
-    formRef.value?.validate(valid => {
+    formRef.value?.validate(async valid => {
+        const { account, password } = form.value
         console.log(valid);
+        if (valid) {
+            await userStore.getUserInfo({account, password})
+            // 1.提示用户
+            ElMessage.success('登陆成功！')
+            // 2. 跳转首页
+            await router.replace('/')
+        }
     })
 }
 </script>

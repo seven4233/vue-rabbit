@@ -1,11 +1,9 @@
 import '@/styles/common.scss'
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-
 import App from './App.vue'
 import router from './router'
-
+import 'element-plus/dist/index.css'
 const app = createApp(App)
 
 // 引入懒加载指令插件并注册
