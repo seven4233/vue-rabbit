@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 
 export interface SkuObj {
     skuId: string
@@ -39,8 +39,11 @@ export const useCartStore = defineStore('cart', () => {
         cartList.value.splice(idx, 1)
 
     }
+    // 计算属性
+    const totalCount = computed(() => cartList.value.reduce((a, c) => a + c.count, 0))
+    const totalPrice = computed(() => cartList.value.reduce((a, c) => a + +c.price * c.count, 0))
     return {
-        cartList, addCart, delCart
+        cartList, addCart, delCart, totalCount, totalPrice
     }
 
 }, {
