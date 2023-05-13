@@ -23,6 +23,7 @@ export const useCartStore = defineStore('cart', () => {
 
     const cartList = ref<CartObj[]>([])
 
+    // 添加购物车
     const addCart = (cartObj: CartObj) => {
         let tarObj = cartList.value.find(item => item.skuId === cartObj.skuId)
         if (tarObj) {
@@ -31,8 +32,15 @@ export const useCartStore = defineStore('cart', () => {
             cartList.value.push(cartObj)
         }
     }
+
+    // 删除购物车
+    const delCart = (skuId) => {
+        const idx = cartList.value.findIndex(item => item.skuId === skuId)
+        cartList.value.splice(idx, 1)
+
+    }
     return {
-        cartList, addCart
+        cartList, addCart, delCart
     }
 
 }, {

@@ -46,7 +46,7 @@ const count = ref(1)
 const countChange = () => {
     console.log(count.value)
 }
-//
+//添加购物车
 const cartStore = useCartStore();
 const addCart = () => {
 //   选择了，加入购物车
