@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
-import {ref} from 'vue'
-import {useRouter} from "vue-router";
-import type {FormInstance, FormItemRule} from 'element-plus/lib/components/index.js'
-import type {FormRules} from "element-plus/lib/components/index.js";
-import {ElMessage} from 'element-plus'
-import {useUserStore} from "@/stores/user";
+import { ref } from 'vue'
+import { useRouter } from "vue-router";
+import type { FormInstance, FormItemRule } from 'element-plus/lib/components/index.js'
+import type { FormRules } from "element-plus/lib/components/index.js";
+import { ElMessage } from 'element-plus'
+import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore()
 
@@ -13,105 +13,104 @@ const userStore = useUserStore()
 const formRef = ref<FormInstance>()
 
 const form = ref({
-    account: '',
-    password: '',
-    agree: true
+  account: '',
+  password: '',
+  agree: true
 })
 const rules = ref<FormRules>({
-    account: [
-        {required: true, message: "用户名不能为空", trigger: "blur"},
-    ],
-    password: [
-        {required: true, message: '密码不能为空', trigger: 'blue'},
-        {min: 6, max: 14, message: '密码长度为6-14个字符', trigger: 'blur'}
-    ],
-    agree: [
-        {
-            validator(rule, value, callback) {
-                if (value) {
-                    callback()
-                } else {
-                    callback(new Error('请勾选协议'))
-                }
-            }
+  account: [
+    { required: true, message: "用户名不能为空", trigger: "blur" },
+  ],
+  password: [
+    { required: true, message: '密码不能为空', trigger: 'blue' },
+    { min: 6, max: 14, message: '密码长度为6-14个字符', trigger: 'blur' }
+  ],
+  agree: [
+    {
+      validator(rule, value, callback) {
+        if (value) {
+          callback()
+        } else {
+          callback(new Error('请勾选协议'))
         }
-    ]
+      }
+    }
+  ]
 })
 
 const router = useRouter()
 // 点击登录
 const login = () => {
-    formRef.value?.validate(async valid => {
-        const {account, password} = form.value
-        console.log(valid);
-        if (valid) {
-            await userStore.getUserInfo({account, password})
-            // 1.提示用户
-            ElMessage.success('登陆成功！')
-            // 2. 跳转首页
-            await router.replace('/')
-        }
-    })
+  formRef.value?.validate(async valid => {
+    const { account, password } = form.value
+    console.log(valid);
+    if (valid) {
+      await userStore.getUserInfo({ account, password })
+      // 1.提示用户
+      ElMessage.success('登陆成功！')
+      // 2. 跳转首页
+      await router.replace('/')
+    }
+  })
 }
 </script>
 
 
 <template>
-    <div>
-        <header class="login-header">
-            <div class="container m-top-20">
-                <h1 class="logo">
-                    <RouterLink to="/">小兔鲜</RouterLink>
-                </h1>
-                <RouterLink class="entry" to="/">
-                    进入网站首页
-                    <i class="iconfont icon-angle-right"></i>
-                    <i class="iconfont icon-angle-right"></i>
-                </RouterLink>
-            </div>
-        </header>
-        <section class="login-section">
-            <div class="wrapper">
-                <nav>
-                    <a href="javascript:">账户登录</a>
-                </nav>
-                <div class="account-box">
-                    <div class="form">
-                        <el-form :rules="rules" :model="form" ref="formRef" label-position="right" label-width="60px"
-                                 status-icon>
-                            <el-form-item label="账户" prop="account">
-                                <el-input v-model="form.account"/>
-                            </el-form-item>
-                            <el-form-item label="密码" prop="password">
-                                <el-input v-model="form.password"/>
-                            </el-form-item>
-                            <el-form-item label-width="22px" prop="agree">
-                                <el-checkbox size="large" v-model="form.agree">
-                                    我已同意隐私条款和服务条款
-                                </el-checkbox>
-                            </el-form-item>
-                            <el-button size="large" class="subBtn" @click="login">点击登录</el-button>
-                        </el-form>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div>
+    <header class="login-header">
+      <div class="container m-top-20">
+        <h1 class="logo">
+          <RouterLink to="/">小兔鲜</RouterLink>
+        </h1>
+        <RouterLink class="entry" to="/">
+          进入网站首页
+          <i class="iconfont icon-angle-right"></i>
+          <i class="iconfont icon-angle-right"></i>
+        </RouterLink>
+      </div>
+    </header>
+    <section class="login-section">
+      <div class="wrapper">
+        <nav>
+          <a href="javascript:">账户登录</a>
+        </nav>
+        <div class="account-box">
+          <div class="form">
+            <el-form :rules="rules" :model="form" ref="formRef" label-position="right" label-width="60px" status-icon>
+              <el-form-item label="账户" prop="account">
+                <el-input v-model="form.account" />
+              </el-form-item>
+              <el-form-item label="密码" prop="password">
+                <el-input v-model="form.password" />
+              </el-form-item>
+              <el-form-item label-width="22px" prop="agree">
+                <el-checkbox size="large" v-model="form.agree">
+                  我已同意隐私条款和服务条款
+                </el-checkbox>
+              </el-form-item>
+              <el-button size="large" class="subBtn" @click="login">点击登录</el-button>
+            </el-form>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        <footer class="login-footer">
-            <div class="container">
-                <p>
-                    <a href="javascript:;">关于我们</a>
-                    <a href="javascript:;">帮助中心</a>
-                    <a href="javascript:;">售后服务</a>
-                    <a href="javascript:;">配送与验收</a>
-                    <a href="javascript:;">商务合作</a>
-                    <a href="javascript:;">搜索推荐</a>
-                    <a href="javascript:;">友情链接</a>
-                </p>
-                <p>CopyRight &copy; 小兔鲜儿</p>
-            </div>
-        </footer>
-    </div>
+    <footer class="login-footer">
+      <div class="container">
+        <p>
+          <a href="javascript:;">关于我们</a>
+          <a href="javascript:;">帮助中心</a>
+          <a href="javascript:;">售后服务</a>
+          <a href="javascript:;">配送与验收</a>
+          <a href="javascript:;">商务合作</a>
+          <a href="javascript:;">搜索推荐</a>
+          <a href="javascript:;">友情链接</a>
+        </p>
+        <p>CopyRight &copy; 小兔鲜儿</p>
+      </div>
+    </footer>
+  </div>
 </template>
 
 <style scoped lang='scss'>
@@ -210,7 +209,7 @@ const login = () => {
       color: #999;
       display: inline-block;
 
-      ~ a {
+      ~a {
         border-left: 1px solid #ccc;
       }
     }
@@ -241,7 +240,7 @@ const login = () => {
         position: relative;
         height: 36px;
 
-        > i {
+        >i {
           width: 34px;
           height: 34px;
           background: #cfcdcd;
@@ -286,7 +285,7 @@ const login = () => {
         }
       }
 
-      > .error {
+      >.error {
         position: absolute;
         font-size: 12px;
         line-height: 28px;
