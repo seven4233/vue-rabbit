@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {ElMessage} from "element-plus";
 import {useUserStore} from "@/stores/user";
+import router from "@/router";
 
 
 const httpInstance = axios.create({
@@ -23,10 +24,18 @@ httpInstance.interceptors.request.use(
 // 相应拦截器
 httpInstance.interceptors.response.use(
     res => {
-
         return res.data
     },
     err => {
+        // 错误处理
+        const userStore = useUserStore();
+        if (err.response.status === 401) {
+            //1.清楚用户信息
+            userStore.clearUserInfo()
+            //2.返回登录页
+            router.push('/login')
+
+        }
         ElMessage.warning(err.response.data.message)
         return Promise.reject(err)
     }
