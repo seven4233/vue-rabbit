@@ -6,12 +6,12 @@ import httpInstance from '@/utils/http'
  * @returns
  */
 export function getDetailAPI<T>(id: string | string[]) {
-  return httpInstance.request<any, T>({
-    url: '/goods',
-    params: {
-      id,
-    },
-  })
+    return httpInstance.request<any, T>({
+        url: '/goods',
+        params: {
+            id,
+        },
+    })
 }
 
 /**
@@ -20,19 +20,20 @@ export function getDetailAPI<T>(id: string | string[]) {
  * @param {Number} type - 1代表24小时热销榜 2代表周热销榜
  * @param {Number} limit - 获取个数
  */
-type HotGoods = {
-  id: string | string[]
-  type: number
-  limit?: number
+type HotObj = {
+    id: string | string[]
+    type: number
+    limit?: number
 }
-export function getHotGoodsAPI<T>(hotObj: HotGoods) {
-  const { id, type, limit = 3 } = hotObj
-  return httpInstance.request<any, T>({
-    url: '/goods/hot',
-    params: {
-      id,
-      type,
-      limit,
-    },
-  })
+
+export function getHotGoodsAPI<T>(hotObj: HotObj) {
+    const {id, type, limit = 3} = hotObj
+    return httpInstance.request<any, T>({
+        url: '/goods/hot',
+        params: {
+            id,
+            type,
+            limit,
+        },
+    })
 }
