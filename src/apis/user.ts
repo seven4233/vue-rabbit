@@ -17,3 +17,13 @@ export function loginAPI<T>(formData: FormData) {
     },
   })
 }
+
+// 获取猜你喜欢列表
+export function getLikeListAPI(limit = 4) {
+  return httpInstance.request({
+    url: '/goods/relevant',
+    params: {
+      limit,
+    },
+  })
+}
