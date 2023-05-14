@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { useUserStore } from './user'
+import { useUserStore } from './userStore'
 import { delCartAPI, getNewCartListAPI, insertCartAPI } from '@/apis/cart'
 export interface SkuObj {
   skuId: string
@@ -96,6 +96,7 @@ export const useCartStore = defineStore(
       singleCheck,
       allCheck,
       clearCartList,
+      getNewCartList,
       totalCount,
       totalPrice,
       isAll,

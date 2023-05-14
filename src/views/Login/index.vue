@@ -1,11 +1,10 @@
 <script setup lang="ts">
-
 import { ref } from 'vue'
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router'
 import type { FormInstance, FormItemRule } from 'element-plus/lib/components/index.js'
-import type { FormRules } from "element-plus/lib/components/index.js";
+import type { FormRules } from 'element-plus/lib/components/index.js'
 import { ElMessage } from 'element-plus'
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from '@/stores/userStore.js'
 
 const userStore = useUserStore()
 
@@ -15,15 +14,13 @@ const formRef = ref<FormInstance>()
 const form = ref({
   account: '',
   password: '',
-  agree: true
+  agree: true,
 })
 const rules = ref<FormRules>({
-  account: [
-    { required: true, message: "用户名不能为空", trigger: "blur" },
-  ],
+  account: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
   password: [
     { required: true, message: '密码不能为空', trigger: 'blue' },
-    { min: 6, max: 14, message: '密码长度为6-14个字符', trigger: 'blur' }
+    { min: 6, max: 14, message: '密码长度为6-14个字符', trigger: 'blur' },
   ],
   agree: [
     {
@@ -33,9 +30,9 @@ const rules = ref<FormRules>({
         } else {
           callback(new Error('请勾选协议'))
         }
-      }
-    }
-  ]
+      },
+    },
+  ],
 })
 
 const router = useRouter()
@@ -43,7 +40,7 @@ const router = useRouter()
 const login = () => {
   formRef.value?.validate(async valid => {
     const { account, password } = form.value
-    console.log(valid);
+    console.log(valid)
     if (valid) {
       await userStore.getUserInfo({ account, password })
       // 1.提示用户
@@ -54,7 +51,6 @@ const login = () => {
   })
 }
 </script>
-
 
 <template>
   <div>
@@ -85,9 +81,7 @@ const login = () => {
                 <el-input v-model="form.password" />
               </el-form-item>
               <el-form-item label-width="22px" prop="agree">
-                <el-checkbox size="large" v-model="form.agree">
-                  我已同意隐私条款和服务条款
-                </el-checkbox>
+                <el-checkbox size="large" v-model="form.agree"> 我已同意隐私条款和服务条款 </el-checkbox>
               </el-form-item>
               <el-button size="large" class="subBtn" @click="login">点击登录</el-button>
             </el-form>
@@ -113,7 +107,7 @@ const login = () => {
   </div>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .login-header {
   background: #fff;
   border-bottom: 1px solid #e4e4e4;
@@ -132,7 +126,7 @@ const login = () => {
       height: 132px;
       width: 100%;
       text-indent: -9999px;
-      background: url("@/assets/images/logo.png") no-repeat center 18px / contain;
+      background: url('@/assets/images/logo.png') no-repeat center 18px / contain;
     }
   }
 
@@ -209,7 +203,7 @@ const login = () => {
       color: #999;
       display: inline-block;
 
-      ~a {
+      ~ a {
         border-left: 1px solid #ccc;
       }
     }
@@ -240,7 +234,7 @@ const login = () => {
         position: relative;
         height: 36px;
 
-        >i {
+        > i {
           width: 34px;
           height: 34px;
           background: #cfcdcd;
@@ -285,7 +279,7 @@ const login = () => {
         }
       }
 
-      >.error {
+      > .error {
         position: absolute;
         font-size: 12px;
         line-height: 28px;

@@ -32,7 +32,6 @@ export function getNewCartListAPI<T>() {
 /**
  * 删除购物车接口
  */
-
 export function delCartAPI<T>(ids: string[]) {
   return myRequest.request<any, T>({
     url: '/member/cart',
@@ -40,5 +39,18 @@ export function delCartAPI<T>(ids: string[]) {
     data: {
       ids,
     },
+  })
+}
+interface CartArr {
+  skuId: string
+  selected: string
+  count: number
+}
+// 合并购物车接口
+export function mergeCartAPI<T>(cartArr: CartArr[]) {
+  return myRequest.request<any, T>({
+    url: '/member/cart/merge',
+    method: 'POST',
+    data: cartArr,
   })
 }
