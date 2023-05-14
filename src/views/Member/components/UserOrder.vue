@@ -1,35 +1,67 @@
 <script setup lang="ts">
-import { getUserOrderAPI } from '@/apis/order'
-import { onMounted, ref } from 'vue'
+import { getUserOrderAPI } from "@/apis/order";
+import { onMounted, ref } from "vue";
 // tab列表
 const tabTypes = [
-  { name: 'all', label: '全部订单' },
-  { name: 'unpay', label: '待付款' },
-  { name: 'deliver', label: '待发货' },
-  { name: 'receive', label: '待收货' },
-  { name: 'comment', label: '待评价' },
-  { name: 'complete', label: '已完成' },
-  { name: 'cancel', label: '已取消' },
-]
+  { name: "all", label: "全部订单" },
+  { name: "unpay", label: "待付款" },
+  { name: "deliver", label: "待发货" },
+  { name: "receive", label: "待收货" },
+  { name: "comment", label: "待评价" },
+  { name: "complete", label: "已完成" },
+  { name: "cancel", label: "已取消" },
+];
 // 订单列表
-const orderList = ref<any[]>([])
+const orderList = ref<any[]>([]);
 const params = ref({
   orderState: 0,
   page: 1,
   pageSize: 2,
-})
+});
+const total = ref(0);
 const getUserOrder = async () => {
-  const res: any = await getUserOrderAPI(params.value)
-  orderList.value = res.result.items
-}
-onMounted(() => getUserOrder())
+  const res: any = await getUserOrderAPI(params.value);
+  console.log(res.result);
+  orderList.value = res.result.items;
+  total.value = res.result.counts;
+};
+onMounted(() => getUserOrder());
+
+// tab切换
+const tabChange = (type) => {
+  params.value.orderState = type;
+  getUserOrder();
+};
+
+// 页数切换
+const pageChange = (page) => {
+  params.value.page = page;
+  getUserOrder();
+};
+
+// 创建格式化函数
+const formatPayState = (payState) => {
+  const stateMap = {
+    1: "待付款",
+    2: "待发货",
+    3: "待收货",
+    4: "待评价",
+    5: "已完成",
+    6: "已取消",
+  };
+  return stateMap[payState];
+};
 </script>
 
 <template>
   <div class="order-container">
-    <el-tabs>
+    <el-tabs @tab-change="tabChange">
       <!-- tab切换 -->
-      <el-tab-pane v-for="item in tabTypes" :key="item.name" :label="item.label" />
+      <el-tab-pane
+        v-for="item in tabTypes"
+        :key="item.name"
+        :label="item.label"
+      />
 
       <div class="main-container">
         <div class="holder-container" v-if="orderList.length === 0">
@@ -68,7 +100,7 @@ onMounted(() => getUserOrder())
                 </ul>
               </div>
               <div class="column state">
-                <p>{{ order.orderState }}</p>
+                <p>{{ formatPayState(order.orderState) }}</p>
                 <p v-if="order.orderState === 3">
                   <a href="javascript:;" class="green">查看物流</a>
                 </p>
@@ -85,8 +117,20 @@ onMounted(() => getUserOrder())
                 <p>在线支付</p>
               </div>
               <div class="column action">
-                <el-button v-if="order.orderState === 1" type="primary" size="small"> 立即付款 </el-button>
-                <el-button v-if="order.orderState === 3" type="primary" size="small"> 确认收货 </el-button>
+                <el-button
+                  v-if="order.orderState === 1"
+                  type="primary"
+                  size="small"
+                >
+                  立即付款
+                </el-button>
+                <el-button
+                  v-if="order.orderState === 3"
+                  type="primary"
+                  size="small"
+                >
+                  确认收货
+                </el-button>
                 <p><a href="javascript:;">查看详情</a></p>
                 <p v-if="[2, 3, 4, 5].includes(order.orderState)">
                   <a href="javascript:;">再次购买</a>
@@ -94,13 +138,21 @@ onMounted(() => getUserOrder())
                 <p v-if="[4, 5].includes(order.orderState)">
                   <a href="javascript:;">申请售后</a>
                 </p>
-                <p v-if="order.orderState === 1"><a href="javascript:;">取消订单</a></p>
+                <p v-if="order.orderState === 1">
+                  <a href="javascript:;">取消订单</a>
+                </p>
               </div>
             </div>
           </div>
           <!-- 分页 -->
           <div class="pagination-container">
-            <el-pagination background layout="prev, pager, next" />
+            <el-pagination
+              :total="total"
+              :page-size="params.pageSize"
+              background
+              layout="prev, pager, next"
+              @current-change="pageChange"
+            />
           </div>
         </div>
       </div>

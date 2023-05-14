@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCartStore, type CartObj } from '@/stores/cartStore'
 
-const cartStore = useCartStore()
+const cartStore = useCartStore() 
 
 // 单选
 const singCheck = (checked: boolean, i: CartObj) => {
@@ -12,7 +12,7 @@ const singCheck = (checked: boolean, i: CartObj) => {
 // 全选
 const allCheck = (selected: boolean) => {
   cartStore.allCheck(selected)
-}
+} 
 </script>
 
 <template>
