@@ -38,6 +38,15 @@ export const useCartStore = defineStore(
       const idx = cartList.value.findIndex(item => item.skuId === skuId)
       cartList.value.splice(idx, 1)
     }
+
+    // 单选
+    const singleChecked = (skuId: string | number, selected: boolean) => {
+      const targetSku = cartList.value.find(item => item.skuId === skuId)
+      if (targetSku) {
+        targetSku.selected = selected
+      }
+    }
+
     // 计算属性
     const totalCount = computed(() => cartList.value.reduce((a, c) => a + c.count, 0))
     const totalPrice = computed(() => cartList.value.reduce((a, c) => a + +c.price * c.count, 0))
@@ -45,6 +54,7 @@ export const useCartStore = defineStore(
       cartList,
       addCart,
       delCart,
+      singleChecked,
       totalCount,
       totalPrice,
     }

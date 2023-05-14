@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { useCartStore } from "@/stores/cartStore";
+import { useCartStore } from '@/stores/cartStore'
 
 const cartStore = useCartStore()
-
 </script>
 
 <template>
@@ -28,12 +27,11 @@ const cartStore = useCartStore()
           </RouterLink>
           <i class="iconfont icon-close-new" @click="cartStore.delCart(i.skuId)"></i>
         </div>
-
       </div>
       <div class="foot">
         <div class="total">
           <p>共 {{ cartStore.totalCount }} 件商品</p>
-          <p>&yen; {{ cartStore.totalPrice?.toFixed(2) }} </p>
+          <p>&yen; {{ cartStore.totalPrice?.toFixed(2) }}</p>
         </div>
         <el-button size="large" type="primary" @click="$router.push('/cartlist')">去购物车结算</el-button>
       </div>
@@ -95,7 +93,7 @@ const cartStore = useCartStore()
     padding-top: 10px;
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       right: 14px;
       top: -10px;
