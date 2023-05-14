@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useUserStore } from './user'
-import { getNewCartListAPI, insertCartAPI } from '@/apis/cart'
+import { delCartAPI, getNewCartListAPI, insertCartAPI } from '@/apis/cart'
 export interface SkuObj {
   skuId: string
   price: string
@@ -24,17 +24,20 @@ export const useCartStore = defineStore(
   () => {
     const userStore = useUserStore()
     const isLogin = computed(() => userStore.userInfo.token)
+    // 获取最新购物车数据
+    const getNewCartList = async () => {
+      const res = await getNewCartListAPI<IReturnType<any>>()
+      cartList.value = res.result
+    }
     // 定义state
     const cartList = ref<CartObj[]>([])
 
     // 添加购物车
-
     const addCart = async (cartObj: CartObj) => {
       if (isLogin.value) {
         // 登录之后的购物车逻辑
         await insertCartAPI({ skuId: cartObj.skuId, count: cartObj.count })
-        const res = await getNewCartListAPI<IReturnType<any>>()
-        cartList.value = res.result
+        getNewCartList()
       } else {
         const tarObj = cartList.value.find(item => item.skuId === cartObj.skuId)
         if (tarObj) {
@@ -46,9 +49,14 @@ export const useCartStore = defineStore(
     }
 
     // 删除购物车
-    const delCart = skuId => {
-      const idx = cartList.value.findIndex(item => item.skuId === skuId)
-      cartList.value.splice(idx, 1)
+    const delCart = async (skuId: string) => {
+      if (isLogin.value) {
+        await delCartAPI([skuId])
+        getNewCartList()
+      } else {
+        const idx = cartList.value.findIndex(item => item.skuId === skuId)
+        cartList.value.splice(idx, 1)
+      }
     }
 
     // 单选

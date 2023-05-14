@@ -28,3 +28,17 @@ export function getNewCartListAPI<T>() {
     url: '/member/cart',
   })
 }
+
+/**
+ * 删除购物车接口
+ */
+
+export function delCartAPI<T>(ids: string[]) {
+  return myRequest.request<any, T>({
+    url: '/member/cart',
+    method: 'DELETE',
+    data: {
+      ids,
+    },
+  })
+}
