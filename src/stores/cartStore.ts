@@ -40,23 +40,32 @@ export const useCartStore = defineStore(
     }
 
     // 单选
-    const singleChecked = (skuId: string | number, selected: boolean) => {
+    const singleCheck = (skuId: string | number, selected: boolean) => {
       const targetSku = cartList.value.find(item => item.skuId === skuId)
       if (targetSku) {
         targetSku.selected = selected
       }
     }
+    // 全选
+    const allCheck = (selected: boolean) => {
+      cartList.value.map(item => (item.selected = selected))
+    }
 
     // 计算属性
     const totalCount = computed(() => cartList.value.reduce((a, c) => a + c.count, 0))
     const totalPrice = computed(() => cartList.value.reduce((a, c) => a + +c.price * c.count, 0))
+
+    // 多选
+    const isAll = computed(() => cartList.value.every(item => item.selected))
     return {
       cartList,
       addCart,
       delCart,
-      singleChecked,
+      singleCheck,
+      allCheck,
       totalCount,
       totalPrice,
+      isAll,
     }
   },
   {

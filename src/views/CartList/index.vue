@@ -4,10 +4,15 @@ import { useCartStore, type CartObj } from '@/stores/cartStore'
 const cartStore = useCartStore()
 
 // 单选
-const singChecked = (checked: boolean, i: CartObj) => {
+const singCheck = (checked: boolean, i: CartObj) => {
   // 调用单选action
-  cartStore.singleChecked(i.skuId, checked)
+  cartStore.singleCheck(i.skuId, checked)
   console.log(checked, i)
+}
+
+// 全选
+const allCheck = (selected: boolean) => {
+  cartStore.allCheck(selected)
 }
 </script>
 
@@ -19,7 +24,7 @@ const singChecked = (checked: boolean, i: CartObj) => {
           <thead>
             <tr>
               <th width="120">
-                <el-checkbox />
+                <el-checkbox label="全选" :model-value="cartStore.isAll" @change="allCheck" />
               </th>
               <th width="400">商品信息</th>
               <th width="220">单价</th>
@@ -32,7 +37,7 @@ const singChecked = (checked: boolean, i: CartObj) => {
           <tbody>
             <tr v-for="i in cartStore.cartList" :key="i.id">
               <td>
-                <el-checkbox :model-value="i.selected" @change="(selected:boolean) => singChecked(selected, i)" />
+                <el-checkbox :model-value="i.selected" @change="(selected:boolean) => singCheck(selected, i)" />
               </td>
               <td>
                 <div class="goods">
