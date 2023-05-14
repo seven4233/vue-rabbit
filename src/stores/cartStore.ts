@@ -58,6 +58,10 @@ export const useCartStore = defineStore(
         cartList.value.splice(idx, 1)
       }
     }
+    // 清楚购物车数据
+    const clearCartList = () => {
+      cartList.value = []
+    }
 
     // 单选
     const singleCheck = (skuId: string | number, selected: boolean) => {
@@ -91,6 +95,7 @@ export const useCartStore = defineStore(
       delCart,
       singleCheck,
       allCheck,
+      clearCartList,
       totalCount,
       totalPrice,
       isAll,
