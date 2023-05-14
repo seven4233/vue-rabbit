@@ -1,28 +1,16 @@
 <script setup lang="ts">
-import { getCheckoutInfoAIP } from '@/apis/checkout'
+import { getCheckoutInfoAPI, createOrderAPI } from '@/apis/checkout'
 import { onMounted, ref, type Ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useCartStore } from '@/stores/cartStore'
+import type { Checkout, Address } from './type'
+const cartStore = useCartStore()
 
-interface Checkout {
-  userAddresses: any[]
-  goods: any[]
-  summary: any
-}
-interface Address {
-  id: string
-  receiver: string
-  contact: string
-  provinceCode: string
-  cityCode: string
-  countyCode: string
-  address: string
-  isDefault: number
-  fullLocation: string
-}
 const checkInfo: Ref<Checkout> = ref({} as Checkout) // 订单对象
 const curAddress: Ref<Address> = ref({} as Address) // 地址对象
 
 const getCheckInfo = async () => {
-  const res = await getCheckoutInfoAIP<IReturnType<Checkout>>()
+  const res = await getCheckoutInfoAPI<IReturnType<Checkout>>()
   checkInfo.value = res.result
   // 适配默认地址
   curAddress.value = checkInfo.value.userAddresses.find(item => item.isDefault === 0)
@@ -31,6 +19,43 @@ onMounted(() => getCheckInfo())
 
 // 弹框
 const showDialog = ref(false)
+
+// 切换地址
+const activeAddress: Ref<Address> = ref({} as Address)
+const switchAddress = (item: Address) => {
+  activeAddress.value = item
+}
+const confirm = () => {
+  curAddress.value = activeAddress.value
+  showDialog.value = false
+}
+
+// 创建订单
+const router = useRouter()
+const submitOrder = async () => {
+  const res = await createOrderAPI<IReturnType<any>>({
+    deliveryTimeType: 1,
+    payType: 1,
+    payChannel: 1,
+    buyerMessage: '',
+    goods: checkInfo.value.goods.map(item => {
+      return {
+        skuId: item.skuId,
+        count: item.count,
+      }
+    }),
+    addressId: curAddress.value.id,
+  })
+  const orderId = res.result.id
+  router.push({
+    path: '/pay',
+    query: {
+      id: orderId,
+    },
+  })
+  // 更新购物车
+  cartStore.clearCartList()
+}
 </script>
 
 <template>
@@ -127,7 +152,7 @@ const showDialog = ref(false)
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large">提交订单</el-button>
+          <el-button type="primary" size="large" @click="submitOrder">提交订单</el-button>
         </div>
       </div>
     </div>
@@ -135,7 +160,12 @@ const showDialog = ref(false)
   <!-- 切换地址 -->
   <el-dialog title="切换收货地址" width="30%" center v-model="showDialog">
     <div class="addressWrapper">
-      <div class="text item" v-for="item in checkInfo.userAddresses" :key="item.id">
+      <div
+        class="text item"
+        :class="{ active: activeAddress.id === item.id }"
+        v-for="item in checkInfo.userAddresses"
+        :key="item.id"
+        @click="switchAddress(item)">
         <ul>
           <li>
             <span>收<i />货<i />人：</span>{{ item.receiver }}
@@ -148,7 +178,7 @@ const showDialog = ref(false)
     <template #footer>
       <span class="dialog-footer">
         <el-button>取消</el-button>
-        <el-button type="primary">确定</el-button>
+        <el-button type="primary" @click="confirm">确定</el-button>
       </span>
     </template>
   </el-dialog>
